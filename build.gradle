@@ -1,0 +1,35 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.10'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+//spring version은 다른 라이브러리 버전까지 관리를 해줌. Spring 버전을 올리면 다른 의존 라이브러리 버전도 같이 올라감.
+group = 'jpabook'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor//Lombok 설정
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    //devtools를 넣을 경우 수동으로 서버를 재시작 하지 않아도 소스를 수정할 경우 캐시도 지우고 리로딩이 되게 만들어줌
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+//Dependencies가 필요한 의존 라이브러리를 불러옴.
+test {
+	useJUnitPlatform()
+}

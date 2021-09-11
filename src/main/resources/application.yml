@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password :
+      driver-class-name : org.h2.Driver
+    #MVCC=TRUE 여러 개가 한 번에 접근했을 때 더 빠르게 처리가 됌. 권장이니까 그냥 넣을것.
+
+  jpa:
+    hibernate:
+      ddl-auto: create #애플리케이션 실행 시점에 내가 가지고 있는 테이블을 다 지우고 다시 생성함(내가 작성한 Entity를 토대로 )
+    properties:
+      hibernate:
+#        show-sql : true System.out 형식 출력
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace #파라미터 로그 찍음
