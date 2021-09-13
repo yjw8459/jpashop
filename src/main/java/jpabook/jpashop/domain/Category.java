@@ -41,7 +41,7 @@ public class Category {
     * */
 
     //부모 ManyToOne
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="parent_id")
     private Category parent;
 

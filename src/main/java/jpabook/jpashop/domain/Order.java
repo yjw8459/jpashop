@@ -18,7 +18,7 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id") //foreign 키 UPDATE를 하는 것이 주인. JPA 규약 다대일관계에서.
     private Member member;
 
@@ -31,7 +31,7 @@ public class Order {
     *   엑세스를 많이하는 곳에 두는 것이 좋다.
     *   연관관계의 주인임.
     * */
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delevery_id")
     private Delivery delivery;
 

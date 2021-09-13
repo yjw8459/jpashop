@@ -19,7 +19,7 @@ public class Delivery {
     *   주인 : @JoinColumn
     *   거울 : mappedBy
     * */
-    @OneToOne(mappedBy = "delivery")
+    @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
     private Order order;
 
     @Embedded
