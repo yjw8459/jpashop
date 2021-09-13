@@ -25,6 +25,10 @@ Hibernate가 변경한 컬렉션을 다시 set으로 수정할 경우 Hibernate�
 
 
 
+
+
+
+
 테이블, 컬럼명 생성전략
 스프링 부트는 SpringPhysicalNamingStrategy
 스프링 부트 신규 설정(엔티티(필드) -> 테이블(컬럼))
