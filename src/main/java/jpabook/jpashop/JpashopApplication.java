@@ -3,7 +3,7 @@ package jpabook.jpashop;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication	//동 레벨 컴포넌트와 하위 디렉터리에 컴포넌트를 전체 스캔함.
 public class JpashopApplication {
 	//성능이슈, 스프링부트에서 jsp를 권장하지 않음 : Thymeleaf 사용
 	//Terminal -> 프로젝트 경로 -> ./gradlew dependencies : 의존 관계들이 쭉 나옴
