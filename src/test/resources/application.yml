@@ -1,6 +1,7 @@
+
+#Test 시 Test안의 yml이 우선권을 가짐
 spring:
   datasource:
-    #url: jdbc:h2:tcp://localhost/~/test
     url: jdbc:h2:mem:test
     username: sa
     password :
