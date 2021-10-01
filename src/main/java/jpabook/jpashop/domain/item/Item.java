@@ -43,7 +43,7 @@ public abstract class Item {    //상속 관계 매핑을 위한 Abstract Class
 
     public void removeStock(int quantity){
         int restStock = this.stockQuantity - quantity;
-        if ( restStock > 0 ){
+        if ( restStock < 0 ){
             throw new NotEnoughStockException("need more stock");
         }
         this.stockQuantity = restStock;
