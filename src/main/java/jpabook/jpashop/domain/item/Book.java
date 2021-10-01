@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("B")    //저장할 때 구분할 값
 @Getter @Setter
-public class book extends Item{
+public class Book extends Item{
 
     private String author;
     private String isbn;
