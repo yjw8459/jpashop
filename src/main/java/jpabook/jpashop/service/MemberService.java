@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+//회원 처리 서비스
 @Service
 @Transactional(readOnly = true)      //클래스 레벨에 Transactional을 사용할 경우 public은 모두 포함
 //@AllArgsConstructor  생성자를 만들어줌

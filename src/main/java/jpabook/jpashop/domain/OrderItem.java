@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+//주문 상품 엔티티
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  //protected를 생성자를 만들어줌  Protected로 제약하는 경우 new 생성 방지 때문

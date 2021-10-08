@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import java.util.List;
 
+//회원 레포지토리
 @Repository     //Component Scan으로 자동으로 스프링 빈으로 관리됨
 @RequiredArgsConstructor
 public class MemberRepository {

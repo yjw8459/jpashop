@@ -17,6 +17,8 @@ import java.util.List;
  *                   TABLE_PER_CLASS : Book, Album, Movie 3개의 테이블이 나오는 방식
  *
  * */
+
+//상품 공통 클래스
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+//주문 처리 서비스
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor

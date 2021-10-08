@@ -12,6 +12,7 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//주문 레포지토리
 @Repository
 @RequiredArgsConstructor
 public class OrderRepository {

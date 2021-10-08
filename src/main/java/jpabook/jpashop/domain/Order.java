@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+//주문 엔티티
 @Entity
 @Table(name ="orders")
 @Getter @Setter

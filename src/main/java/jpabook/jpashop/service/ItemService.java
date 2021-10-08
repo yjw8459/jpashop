@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+//상품 처리 서비스
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor

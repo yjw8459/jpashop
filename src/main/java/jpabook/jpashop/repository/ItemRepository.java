@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+//상품 레포지토리
 @Repository
 @RequiredArgsConstructor
 public class ItemRepository {
