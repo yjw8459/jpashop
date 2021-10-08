@@ -13,6 +13,8 @@ import javax.persistence.Embeddable;
 
  */
 
+
+//고객 주소지 엔티티
 @Embeddable //어딘가에 내장이 될 수 있다.
 @Getter
 public class Address {

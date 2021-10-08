@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+//배송정보 엔티티
 @Entity
 @Getter @Setter
 public class Delivery {
