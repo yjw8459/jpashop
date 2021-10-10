@@ -117,3 +117,13 @@ Thymeleaf
 
 웹 페이지 개발 시 꿀 팁
     - Command + Shift + F4 누르면 자동 리컴파일 빌드
+
+
+
+단축키 메모
+- Command + E           : 최근에 열었던 파일 목록
+- Command + Shift + F4  : 자동 리컴파일 빌드
+- Command + Option + M  : 생성자를 메서드로 묶음
+- Command + shift + T   : 테스트와 테스트 아닌 소스 화면 이동
+- Command + N           : 생성자, Getter, Setter 등 생성 단축키
+- Shift + Command + C     : 파일 경로 복사
