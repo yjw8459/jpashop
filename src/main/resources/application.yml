@@ -14,9 +14,10 @@ spring:
       hibernate:
 #        show-sql : true System.out 형식 출력
         format_sql: true
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
+# 아래처럼 설정하지 않아도 기본적으로  Thymeleaf가 설정되어 있음.
+#  thymeleaf:
+#    prefix: classpath:/templates/
+#    suffix: .html
 
 logging:
   level:

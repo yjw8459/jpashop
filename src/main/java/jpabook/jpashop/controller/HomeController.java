@@ -17,7 +17,7 @@ public class HomeController {
     @RequestMapping("/")
     public String home(){
         log.info("home Controller");
-        return "home";
+        return "home";//Command 버튼을 누르고 클릭 시 해당 뷰 페이지로 이동
     }
 
 }

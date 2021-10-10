@@ -22,7 +22,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-devtools' 
     //devtools를 넣을 경우 수동으로 서버를 재시작 하지 않아도 소스를 수정할 경우 캐시도 지우고 리로딩이 되게 만들어줌
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
