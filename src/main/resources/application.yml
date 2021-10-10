@@ -14,8 +14,12 @@ spring:
       hibernate:
 #        show-sql : true System.out 형식 출력
         format_sql: true
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace #파라미터 로그 찍음
+
