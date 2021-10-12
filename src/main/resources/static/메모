@@ -135,3 +135,4 @@ Thymeleaf
 - Command + shift + T   : 테스트와 테스트 아닌 소스 화면 이동
 - Command + N           : 생성자, Getter, Setter 등 생성 단축키
 - Shift + Command + C     : 파일 경로 복사
+- Option + Command + Enter : 자동완성
