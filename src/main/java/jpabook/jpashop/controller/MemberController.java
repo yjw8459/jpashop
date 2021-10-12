@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,4 +42,15 @@ public class MemberController {
         membverService.join(member);
         return "redirect:/";
     }
+
+    @GetMapping("/members")
+    public String list(Model model){
+        //여기서 Member를 사용하는 이유는 핵심 비즈니스 로직 외의 로직이 따로 필요가 없기 때문이다.
+        List<Member> members = membverService.findMembers();    //Member 엔티티를 사용하기 보단, DTO를 사용하는 것이 좋다.
+        model.addAttribute("members", members);
+        return "members/memberList";
+    }
+
+
+
 }
