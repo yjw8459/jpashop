@@ -109,6 +109,7 @@ public class Order {
             throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
         }
 
+        //상태를 CANCEL로 바꾸고 따로 save를 하지 않아도 변경감지를 통해서 UPDATE 쿼리를 JPA가 날려주고 트랜잭션 커밋함
         this.setStatus(OrderStatus.CANCEL);
         for (OrderItem orderItem : orderItems){
             orderItem.cancel();
