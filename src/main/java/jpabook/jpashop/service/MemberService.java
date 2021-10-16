@@ -54,4 +54,18 @@ public class MemberService {
     public Member findOne(Long memberId){
         return memberRepository.findOne(memberId);
     }
+
+    /**
+     * update는 UPDATE 후 그대로 끝냄
+     * 엔티티를 반환하거나 하지 않음.
+     * 스타일이긴 한대 추 후에 꼬일 일을 방지하기 위함.
+     * ID값 정도는 Return한다.
+     * @param id
+     * @param name
+     */
+    @Transactional
+    public void update(Long id, String name){
+        Member member = memberRepository.findOne(id);   //영속 상태 member
+        member.setName(name);                           //member setName
+    }   //영속 상태의 member가 수정돼서 UPDATE 쿼리를 JPA에서 날림
 }

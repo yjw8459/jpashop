@@ -202,7 +202,9 @@ api패키지로 분리하는 이유는
 @Valid : @Valid를 사용하면 자바X 벨리데이션 관련된 내용들이 자동으로 벨리데이션 된다.
 @RequestBody : @RequestBody를 사용하면 API 통신을 하면 JSON으로만 사용하는데 Json으로 온 Body를 객체에 그대로 매핑에서 넣어줌
 @NotEmpty : 값이 비어있으면 안된다.
-
+@PutMapping : 같은 것으로 여러 번 호출해도 결과가 같다.
+@AllArgsConstructor : 생성자 만듬
+@NoAllArgsConstructor : 파라미터가 없는 빈 생성자 만듬
 
 자바X 벨리데이션
 @NotEmpty : 값이 비어있는 지 체크
