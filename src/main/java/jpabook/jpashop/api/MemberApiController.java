@@ -49,6 +49,8 @@ public class MemberApiController {
         return new CreateMemberResponse(memberId);
     }
 
+
+    //PutMapping을 사용할 경우, 같은 데이터로 여러번 호출해도 결과는 같음.
     @PutMapping("/api/v2/members/{id}")
     public UpdateMemberResponse updateMemberV2(@PathVariable("id") Long id,
                                                @RequestBody @Valid UpdateMemberRequest request){
