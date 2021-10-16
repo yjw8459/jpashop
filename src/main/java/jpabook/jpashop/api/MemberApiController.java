@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.transform.Result;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +19,49 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    @GetMapping("/api/v1/members")
+    public List<Member> memberV1(){
+        return memberService.findMembers();
+    }
+
+    @GetMapping("/api/v2/members")
+    public Result memberV2(){
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDTO> collect = findMembers.stream()  //findMembers를 Stream화
+                .map(m -> new MemberDTO(m.getName()))   //요소를 Member에서 MemberDTO로 변경
+                .collect(Collectors.toList())           //리턴 타입
+                ;
+
+        return new Result(collect.size(), collect);
+    }
+
+    /**
+     * MemberApiController에서만 사용하는 클래스이기 때문에
+     * 이너 클래스로 생성해서 사용한다.
+     *
+     * 엔티티를 직접 api로 전달하지 않고 DTO를 사용한다.
+     * 계속 언급했듯이, 엔티티를 화면에 유출하지 않도록 한다.
+     * 엔티티를 변경함으로써 api에 영향이 없도록 개발하는 것은 굉장히 중요하다.
+     */
+    @Data
+    @AllArgsConstructor
+    static class MemberDTO{
+        private String name;
+    }
+
+    /**
+     * 그냥 List를 반환하지 않고, Result라는 클래스로 한 번 감싸주는 이유는
+     * 확장성을 고려하기 위함.
+     * 예를 들어 List의 Count도 같이 반환해야 한다면,
+     * Result 클래스에 변수를 추가하고 사용하면 되기 때문에 확장에 용이함.
+     * @param <T>
+     */
+    @Data
+    @AllArgsConstructor
+    static class Result<T>{
+        private int count;
+        private T data;
+    }
 
     //v1의 장점은 CreateMemberRequest같은 DTO를 만들지 않아도 됌
     @PostMapping("/api/v1/members")
