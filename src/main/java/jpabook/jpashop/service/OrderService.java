@@ -30,6 +30,12 @@ public class OrderService {
      */
     @Transactional
     public Long order(Long memberId, Long itemId, int count){
+        /**
+         * Service 계층(핵심 비즈니스 로직)에서 식별 값만 가지고 find로 영속성 엔티티를 조회해서 사용하는 것이 훨씬 사용범위가 클 수 있다.
+         * 가급적이면 컨트롤러에서 조회가 아닌 핵심 비즈니스 로직이 있을 경우는 식별자만 받아서 find부터 작업하도록 한다.
+         */
+
+
         //엔티티 조회
         Member member = memberRepository.findOne(memberId);
         Item item = itemRepository.findOne(itemId);

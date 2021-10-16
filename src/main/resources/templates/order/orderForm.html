@@ -8,6 +8,8 @@
         <div class="form-group">
             <label for="member">주문회원</label>
             <select name="memberId" id="member" class="form-control">
+
+                <!-- 모든 회원을 select 만듬  -->
                 <option value="">회원선택</option> <option th:each="member : ${members}"
                                                        th:value="${member.id}"
                                                        th:text="${member.name}" />
@@ -15,6 +17,7 @@
         </div>
         <div class="form-group">
             <label for="item">상품명</label>
+            <!-- 모든 아이템을 select 만듬  -->
             <select name="itemId" id="item" class="form-control"> <option value="">상품선택</option>
                 <option th:each="item : ${items}"
                         th:value="${item.id}"
@@ -29,6 +32,8 @@
     </form>
     <br/>
     <div th:replace="fragments/footer :: footer" />
+
 </div> <!-- /container -->
+
 </body>
 </html>
