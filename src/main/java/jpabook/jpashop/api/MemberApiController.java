@@ -13,6 +13,7 @@ import javax.xml.transform.Result;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//Member api 컨트롤러
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
