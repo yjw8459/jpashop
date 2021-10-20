@@ -43,6 +43,7 @@ public class OrderSimpleApiController {
          *
          * 이 경우 fetchType이 LAZY인 경우 Jackson 라이브러리에게 아무것도 넘기지 말라. 라고 명시할 수 있는
          * Hibernate5Module을 Bean으로 생성해서 사용해야함.
+         *
          */
         List<Order> all = orderRepository.findAll(new OrderSearch());
         return all;

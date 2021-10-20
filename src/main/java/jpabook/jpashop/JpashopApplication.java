@@ -2,6 +2,7 @@ package jpabook.jpashop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication	//동 레벨 컴포넌트와 하위 디렉터리에 컴포넌트를 전체 스캔함.
 public class JpashopApplication {
@@ -21,5 +22,25 @@ public class JpashopApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JpashopApplication.class, args);
 	}
+
+//	@Bean	사용시 fetchType이 LAZY일 경우 조회안함.
+//	Hibernate5Module hibernate5Module(){
+//		return new Hibernate5Module();
+//	}
+
+
+	/**
+	 * 아래의 경우를 추천하지 않음.
+	 * 1. 불필요한 쿼리들이 다 날아감.
+	 * 2. 엔티티 정보가 api에 그대로 노출됌
+	 * 3. 엔티티 정보가 바뀔경우 api 스펙도 바뀌는 위험도 있음.
+	 */
+
+//	@Bean	FORCE_LAZY_LOADING 사용 시 지연로딩일 경우도 다조회해서 가져옴
+//	Hibernate5Module hibernate5Module(){
+//		Hibernate5Module hibernate5Module = new Hibernate5Module();
+//		hibernate5Module.configure(Hibernate5Module.Feature.FORCE_LAZY_LOADING, true);
+//		return hibernate5Module;
+//	}
 
 }
