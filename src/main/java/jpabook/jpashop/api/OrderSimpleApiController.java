@@ -1,13 +1,18 @@
 package jpabook.jpashop.api;
 
+import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 연관관계 매핑
@@ -47,5 +52,52 @@ public class OrderSimpleApiController {
          */
         List<Order> all = orderRepository.findAll(new OrderSearch());
         return all;
+    }
+
+    @GetMapping("api/v2/simple-orders")
+    public List<SimpleOrderDto> ordersV2(){
+        /**
+         * (SimpleOrderDto :: new) : 람다 레퍼런스
+         * .map() : A를 B로 바꿀 때
+         * api 스펙에 핏하게 맞춘 DTO를 Return
+         * 변경할 경우 변경해야 할 부분들에 컴파일 에러가 발생하게 하는 것이 가장 좋다.
+         *
+         * v2의 경우는 데이터 조회도 OK, DTO반환도 OK지만 Hibernate에서 너무 많은 쿼리가 나간다.
+         * 테이블 3개를 건들기 때문.
+         * 나가는 쿼리 : member, Order, Delivery
+         * 나가는 쿼리가 많은 이유는 SimpleOrderDto의 생성자에서
+         * 가짜 프록시 엔티티에서 get을 호출하기 때문에 DB에서 데이터를 끌고옴(Member, Delivery)
+         * 즉 Order 쿼리는 한번 돌지만, Member, Delivery는 데이터 하나당 한번씩 나간다. (ex : 1 = 3, 2 = 5)
+         * 지연로딩은 DB에서 바로 조회하는 것이 아니라, 영속성 컨텍스트를 확인한다.
+         * Order를 조회하고 주문 Member가 영속성 컨텍스트에 존재하는 엔티티라면 DB를 조회하지 않고,
+         * 영속성 컨텍스트에 있는 엔티티를 사용한다.
+         */
+        List<Order> orders = orderRepository.findAll(new OrderSearch());
+        List<SimpleOrderDto> result = orders.stream().map(SimpleOrderDto :: new)
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+    @GetMapping("api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3(){
+        return null;
+    }
+
+    @Data
+    static class SimpleOrderDto{
+        private Long orderId;
+        private String name;
+        private LocalDateTime orderDate;
+        private OrderStatus orderStatus;
+        private Address address;
+
+        public SimpleOrderDto(Order order){
+            orderId = order.getId();
+            name = order.getMember().getName();          //가짜 프록시이므로 DB에서 데이터 끌고옴(LAZY 초기화)
+            orderDate = order.getOrderDate();
+            orderStatus = order.getStatus();
+            address = order.getDelivery().getAddress();  //가짜 프록시이므로 DB에서 데이터 끌고옴(LAZY 초기화)
+        }
     }
 }
