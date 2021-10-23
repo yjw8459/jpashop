@@ -90,20 +90,6 @@ public class OrderRepository {
         ).getResultList();
     }
 
-    public List<OrderSimpleQueryDto> findOrderDtos() {
-        /**
-         * 가급적 Controller > Service > Repository 한 방향으로 흘러야한다.
-         * 엔티티나 ValueObject(Embedable)만 반환할 수 있음.(JPA)
-         * DTO로 반환하려면 new 로 생성해서 파라미터를 다 넣어줘야함.
-         */
-        return em.createQuery(
-                    "select o from Order o" +
-                            " join o.member m" +
-                            " join o.delivery d", OrderSimpleQueryDto.class
-        ).getResultList();
-    }
-
-
 
     /**
      * 그 밖에 String 쿼리를 직접 조립해서 하는 방법, JPA Criteria 방법이 있음.
