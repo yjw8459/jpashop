@@ -90,6 +90,24 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+
+        /**
+         * 일대 일 관계는 아무리 조인을 많이 걸어도 페이징 처리에 문제가 없음.
+         */
+        return em.createQuery(
+                "select o from Order o" +
+                        //default_batch_fetch_size 옵션을 사용할 시 fetch join member, fetch join delivery 생략 가능하다.
+                        //Order를 조회하고 조회한 데이터에 연관된 데이터를 테이블 별로 조회해서 가져오기 때문.
+                        //하지만 단건 쿼리가 조금 더 많아져서 네트워크 성능이 안 좋을 수 있다.
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).setFirstResult(offset)//offset이 0일 경우 쿼리에 생략된다. 기본이 0
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+
     public List<Order> findAllWithItem() {
         /**
          * 컬렉션 페치조인이란?

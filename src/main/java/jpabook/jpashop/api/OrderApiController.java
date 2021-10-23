@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -74,6 +75,40 @@ public class OrderApiController {
         return result;
     }
 
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> ordersV3_page(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "100") int limit){
+        /**
+         * Order, Member, Delivery를 페치조인해서 가져옴.
+         * ToOne 관계이기 때문에 한번에 땡겨옴.
+         * OrderItem을 루프를 돌면서 컬렉션 조회를 하는데 OrderItem아래 item이 복수개면 복수개만큼 Item을 조회
+         *
+         * application.yml 파일에 hibernate.default_batch_fetch_size : 100(in query의 갯수)
+         * in query : Order 3건일 때 size: 2라면 Order의 일대다 관계인 OrderItem을 최대 2건까지 인쿼리로 미리 조회한다.
+         * fetch_size 옵션을 줄 경우 findAllWithMemberDelivery를 조회했을 때, 연관된 OrderItem을
+         * 미리 조회해서 가져온다.
+         *
+         * 정리 : 처음은 fetch join으로 조회한 Order, Member, Delivery를 조회한다.
+         *  그 후 fetch join으로 가져온 컬렉션만큼 OrderItem을 가져온다.
+         *  마지막으로 OrderItem에 연관된 Item을 가져온다.
+         *  default_batch_fetch_size가 가져오는 기능
+         *  즉, 1 + n + m의 쿼리 갯수가 1 + 1 + 1이 된다.
+         *  테이블 단위 쿼리가 나가면서 데이터를 딱 딱 집어오기 때문에 중복이 없다.
+         *  페이징을 사용할 수 있다.
+         */
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
+
+
+
+        /**
+         * order, member, delivery는 조회가 되었기 때문에 두번 째 루프부터는 조회하지 않음.
+         * OrderItem은 OrderItem X Item 만큼 나감.
+         *
+         */
+        List<OrderDto> result = orders.stream().map(OrderDto::new).collect(Collectors.toList());
+        return result;
+    }
 
     @Getter
     static class OrderItemDto{
@@ -107,7 +142,8 @@ public class OrderApiController {
             orderStatus = order.getStatus();
             address = order.getDelivery().getAddress();
             order.getOrderItems().stream().forEach(o -> o.getItem().getName()); //프록시 초기화
-            orderItems = order.getOrderItems().stream().map(OrderItemDto :: new).collect(Collectors.toList());
+            orderItems = order.getOrderItems().stream()
+                    .map(OrderItemDto :: new).collect(Collectors.toList());
         }
     }
 

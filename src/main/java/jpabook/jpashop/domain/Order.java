@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.lang.reflect.Array;
@@ -40,6 +41,7 @@ public class Order {
         cascade는 persist를 전파한다.
         delete도 전체 delete됨
      */
+    @BatchSize(size = 100)//컬렉션 적용 시
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 

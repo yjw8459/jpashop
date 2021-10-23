@@ -18,6 +18,8 @@ public class OrderItem {
     @Column(name = "order_item_id")
     private long id;
 
+    //ToOne 관계는 @BatchSize를 반대편에 작성
+    //컬렉션이 아닐 경우
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;

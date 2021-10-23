@@ -14,6 +14,7 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
+        default_batch_fetch_size: 100 #굉장히 중요하다 글로벌 설정
 #        show-sql : true System.out 형식 출력
         format_sql: true
 
