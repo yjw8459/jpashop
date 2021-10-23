@@ -1,6 +1,8 @@
 package jpabook.jpashop.repository;
 
+import jpabook.jpashop.api.OrderSimpleApiController;
 import jpabook.jpashop.domain.Order;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
@@ -68,6 +70,40 @@ public class OrderRepository {
         return query.getResultList();
 
     }
+
+    public List<Order> findAllWithMemberDelivery() {
+        /**
+         * Order를 조회하는데 member랑 delivery를 SQL상으로 조인해서 한 번에 다 가져옴.
+         * LAZY를 무시하고 프록시도 아닌 진짜 엔티티를 가져옴.
+         * join fetch : JPA에만 있는 키워드이다. 실제 spl에는 없음.
+         *
+         * ****fetch join은 꼭 100% 이해하고 사용할 것.
+         *
+         * JPA 성능 문제의 90는 n+1으로 인해 발생. (Order를 조회할 때 Order안에 연관되어있는 엔티티들을 전파하면서 조회하는 것.)
+         * 쿼리 조회 결과는 order + member + delivery로 데이터가 길게 조회되고
+         * JPA가 적당하게 잘라서 매핑해줌.
+         */
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
+
+    public List<OrderSimpleQueryDto> findOrderDtos() {
+        /**
+         * 가급적 Controller > Service > Repository 한 방향으로 흘러야한다.
+         * 엔티티나 ValueObject(Embedable)만 반환할 수 있음.(JPA)
+         * DTO로 반환하려면 new 로 생성해서 파라미터를 다 넣어줘야함.
+         */
+        return em.createQuery(
+                    "select o from Order o" +
+                            " join o.member m" +
+                            " join o.delivery d", OrderSimpleQueryDto.class
+        ).getResultList();
+    }
+
+
 
     /**
      * 그 밖에 String 쿼리를 직접 조립해서 하는 방법, JPA Criteria 방법이 있음.

@@ -5,6 +5,7 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.OrderSimpleQueryDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +56,7 @@ public class OrderSimpleApiController {
     }
 
     @GetMapping("api/v2/simple-orders")
-    public List<SimpleOrderDto> ordersV2(){
+    public List<OrderSimpleQueryDto> ordersV2(){
         /**
          * (SimpleOrderDto :: new) : 람다 레퍼런스
          * .map() : A를 B로 바꿀 때
@@ -73,31 +74,26 @@ public class OrderSimpleApiController {
          * 영속성 컨텍스트에 있는 엔티티를 사용한다.
          */
         List<Order> orders = orderRepository.findAll(new OrderSearch());
-        List<SimpleOrderDto> result = orders.stream().map(SimpleOrderDto :: new)
+        List<OrderSimpleQueryDto> result = orders.stream().map(OrderSimpleQueryDto :: new)
                 .collect(Collectors.toList());
 
         return result;
     }
 
     @GetMapping("api/v3/simple-orders")
-    public List<SimpleOrderDto> ordersV3(){
-        return null;
+    public List<OrderSimpleQueryDto> ordersV3(){
+        /**
+         * v2의 findAll 조회를 fetch join으로 바꿈
+         */
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+        List<OrderSimpleQueryDto> result = orders.stream().map( OrderSimpleQueryDto :: new ).collect(Collectors.toList());
+        return result;
     }
 
-    @Data
-    static class SimpleOrderDto{
-        private Long orderId;
-        private String name;
-        private LocalDateTime orderDate;
-        private OrderStatus orderStatus;
-        private Address address;
-
-        public SimpleOrderDto(Order order){
-            orderId = order.getId();
-            name = order.getMember().getName();          //가짜 프록시이므로 DB에서 데이터 끌고옴(LAZY 초기화)
-            orderDate = order.getOrderDate();
-            orderStatus = order.getStatus();
-            address = order.getDelivery().getAddress();  //가짜 프록시이므로 DB에서 데이터 끌고옴(LAZY 초기화)
-        }
+    @GetMapping("api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4(){
+        return orderRepository.findOrderDtos();
     }
+
+
 }
