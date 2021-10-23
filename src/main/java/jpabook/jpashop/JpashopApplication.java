@@ -1,5 +1,6 @@
 package jpabook.jpashop;
 
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -23,10 +24,15 @@ public class JpashopApplication {
 		SpringApplication.run(JpashopApplication.class, args);
 	}
 
-//	@Bean	사용시 fetchType이 LAZY일 경우 조회안함.
-//	Hibernate5Module hibernate5Module(){
-//		return new Hibernate5Module();
-//	}
+	/**
+	 * 기본 설정으로 사용함.
+	 * LAZY로딩을 호출해서 정상적으로 프록시가 초기화된(데이터가 로딩된), api만 출력한다.
+	 * @return
+	 */
+	@Bean	//사용시 fetchType이 LAZY일 경우 조회안함.
+	Hibernate5Module hibernate5Module(){
+		return new Hibernate5Module();
+	}
 
 
 	/**

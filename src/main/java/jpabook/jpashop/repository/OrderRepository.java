@@ -90,6 +90,54 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    public List<Order> findAllWithItem() {
+        /**
+         * 컬렉션 페치조인이란?
+         *  - 일대다 관계에서의 fetch join을 말한다.
+         *
+         * 쿼리를 간편하게 작성하는 QueryDS를 알아볼 것.
+         * Order -> Member, Delivery 문제 없음. (데이터 뻥튀기 X)
+         * Order -> OrderItem 문제가 발생 Order는 1개이고 OrderItem은 2개일 때 데이터는 2개가 됨.
+         * DB입장에선, fetch join도 select 절에 더 데이터를 넣어주냐 정도의 차이이고, 일반적인 join과 다르지 않다.
+         * 데이터가 뻥뒤기 되는 것은 JPA 입장에선 알 수 없음.
+         *
+         * 뻥튀기 된 데이터는 엔티티의 주소 값도 같다.
+         * 이 경우 distinct(중복제거)를 넣어준다.
+         * JPA에서의 distinct는 SQL에서의 distinct에서 추가적인 기능이 있다.
+         * SQL에서의 distinct는 로우의 데이터 전부가 똑같아야 중복 제거가 된다.
+         *
+         * JPA에서의 distinct는 같은 ID값이면 중복을 제거해준다(하나를 버림).
+         * 애플리케이션에 다 가져와서 한번 더 ID 값을 기준으로 한번 더 중복제거를 해줌.
+         * 즉, JPA에서의 distinct는 실제 SQL로 distinct 역할을 하고 애플리케이션에서 한번 더 중복제거 작업을 수행한다.
+         *
+         * 중요한 또 하나
+         *  - 1대 다를 fetch join하면 페이징이 안된다(쿼리가 날아가지 않음).
+         *  - Hibernate가 Warning 로그를 내면서 collection fetch와 같이 정의되었다는 문구와 함께
+         *    메모리에서 sorting 해버림
+         *  - 데이터가 만약 10000건 이었다면, 10000건을 애플리케이션으로 다 퍼올리려서 메모리에서 소트함.
+         *  - 치명적인 오류가 발생할 수 있음.
+         *  - 이유는 JPA 입장에선 데이터의 갯수 측정이 안되기 때문이다.
+         *
+         *  - 일대다 컬렉션 fetch join은 하나만 사용할 수 있다.
+         *
+         *
+         *  정리
+         *  JPA에서의 distinct는 SQL의 distinct에서 추가적인 기능을 한다.
+         *  일대다 관계에서의 fetch join을 한 경우는 페이징 처리를 절대 하면 안된다.
+         *  일대다 컬렉션 fetch join은 하나만 사용할 수 있다.
+         */
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class
+        )
+        .setFirstResult(1)  //1대 다 관계로 페이징 안됨
+        .setMaxResults(100) //1대 다 관계로 페이징 안됨
+        .getResultList();
+    }
+
 
     /**
      * 그 밖에 String 쿼리를 직접 조립해서 하는 방법, JPA Criteria 방법이 있음.
