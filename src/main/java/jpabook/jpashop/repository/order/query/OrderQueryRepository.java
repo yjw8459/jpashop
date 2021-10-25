@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +39,7 @@ public class OrderQueryRepository {
         return result;
     }
 
-    public List<OrderItemQueryDto> findAllByDto_optimization() {
+    public List<OrderQueryDto> findAllByDto_optimization() {
         List<OrderQueryDto> result = findOrders();
 
         /**
@@ -46,12 +47,32 @@ public class OrderQueryRepository {
          */
         List<Long> orderIds = result.stream().map(o -> o.getOrderId()).collect(Collectors.toList());
 
-        return em.createQuery(
+        /**
+         * Order쿼리의 ID를 OrderItem 조회 쿼리에 리스트로 넘겨줌. IN절에 들어감.
+         * @Return OrderItemList
+         */
+        List<OrderItemQueryDto> orderItems = em.createQuery(
                 "select new jpabook.jpashop.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
                         " from OrderItem oi" +
                         " join oi.item i" +
                         " where oi.order.id in :orderIds", OrderItemQueryDto.class
         ).setParameter("orderIds", orderIds).getResultList();
+
+        /**
+         * 찾아온 OrderItemList를 orderItemQueryDto.getOrderId()를 기준으로 그루핑 함.
+         * key는 OrderId, Value는 OrderItemQueryDto
+         * Order의 아이디 값 하나에 여러 개의 OrderItems
+         */
+        Map<Long, List<OrderItemQueryDto>> orderItemMap = orderItems.stream().
+                                                    collect(Collectors.groupingBy(orderItemQueryDto -> orderItemQueryDto.getOrderId()));
+
+        /**
+         * 메모리에서 매칭을 해서 값을 세팅해줌.
+         * OrderId와 같은 것들 찾아서 꽂아줌 orderItemMap.get(o.getOrderId()))
+         */
+        result.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
+
+        return result;
     }
 
     private List<OrderItemQueryDto> findOrderItems(Long orderId) {
